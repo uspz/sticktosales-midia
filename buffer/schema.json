@@ -1,0 +1,1458 @@
+{
+ "CreatePostInput": {
+  "name": "CreatePostInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "aiAssisted",
+    "type": {
+     "name": "Boolean",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "assets",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": null,
+      "kind": "LIST",
+      "ofType": {
+       "name": null,
+       "kind": "NON_NULL"
+      }
+     }
+    }
+   },
+   {
+    "name": "channelId",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "ChannelId",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "draftId",
+    "type": {
+     "name": "DraftId",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "dueAt",
+    "type": {
+     "name": "DateTime",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "ideaId",
+    "type": {
+     "name": "IdeaId",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "metadata",
+    "type": {
+     "name": "PostInputMetaData",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "mode",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "ShareMode",
+      "kind": "ENUM",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "needsApproval",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "Boolean",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "saveToDraft",
+    "type": {
+     "name": "Boolean",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "schedulingType",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "SchedulingType",
+      "kind": "ENUM",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "source",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "tagIds",
+    "type": {
+     "name": null,
+     "kind": "LIST",
+     "ofType": {
+      "name": null,
+      "kind": "NON_NULL",
+      "ofType": {
+       "name": "TagId",
+       "kind": "SCALAR"
+      }
+     }
+    }
+   },
+   {
+    "name": "text",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "PostInputMetaData": {
+  "name": "PostInputMetaData",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "bluesky",
+    "type": {
+     "name": "BlueskyPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "facebook",
+    "type": {
+     "name": "FacebookPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "google",
+    "type": {
+     "name": "GoogleBusinessPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "instagram",
+    "type": {
+     "name": "InstagramPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "linkedin",
+    "type": {
+     "name": "LinkedInPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "mastodon",
+    "type": {
+     "name": "MastodonPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "pinterest",
+    "type": {
+     "name": "PinterestPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "substack",
+    "type": {
+     "name": "SubstackPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "threads",
+    "type": {
+     "name": "ThreadsPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "tiktok",
+    "type": {
+     "name": "TikTokPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "twitter",
+    "type": {
+     "name": "TwitterPostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "youtube",
+    "type": {
+     "name": "YoutubePostMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "ShareMode": {
+  "name": "ShareMode",
+  "kind": "ENUM",
+  "inputFields": null,
+  "enumValues": [
+   {
+    "name": "addToQueue"
+   },
+   {
+    "name": "customScheduled"
+   },
+   {
+    "name": "shareNext"
+   },
+   {
+    "name": "shareNow"
+   }
+  ]
+ },
+ "SchedulingType": {
+  "name": "SchedulingType",
+  "kind": "ENUM",
+  "inputFields": null,
+  "enumValues": [
+   {
+    "name": "automatic"
+   },
+   {
+    "name": "notification"
+   }
+  ]
+ },
+ "BlueskyPostMetadataInput": {
+  "name": "BlueskyPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "linkAttachment",
+    "type": {
+     "name": "LinkAttachmentInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "thread",
+    "type": {
+     "name": null,
+     "kind": "LIST",
+     "ofType": {
+      "name": null,
+      "kind": "NON_NULL",
+      "ofType": {
+       "name": "ThreadedPostInput",
+       "kind": "INPUT_OBJECT"
+      }
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "FacebookPostMetadataInput": {
+  "name": "FacebookPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "annotations",
+    "type": {
+     "name": null,
+     "kind": "LIST",
+     "ofType": {
+      "name": null,
+      "kind": "NON_NULL",
+      "ofType": {
+       "name": "AnnotationInputFacebook",
+       "kind": "INPUT_OBJECT"
+      }
+     }
+    }
+   },
+   {
+    "name": "firstComment",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "linkAttachment",
+    "type": {
+     "name": "LinkAttachmentInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "type",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "PostTypeFacebook",
+      "kind": "ENUM",
+      "ofType": null
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "GoogleBusinessPostMetadataInput": {
+  "name": "GoogleBusinessPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "detailsEvent",
+    "type": {
+     "name": "GoogleBusinessEventMetaDataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "detailsOffer",
+    "type": {
+     "name": "GoogleBusinessOfferMetaDataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "detailsWhatsNew",
+    "type": {
+     "name": "GoogleBusinessWhatsNewMetaDataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "title",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "type",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "PostTypeGoogleBusiness",
+      "kind": "ENUM",
+      "ofType": null
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "InstagramPostMetadataInput": {
+  "name": "InstagramPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "firstComment",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "geolocation",
+    "type": {
+     "name": "InstagramGeolocationInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "isAiGenerated",
+    "type": {
+     "name": "Boolean",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "link",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "shouldShareToFeed",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "Boolean",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "stickerFields",
+    "type": {
+     "name": "InstagramStickerFieldsInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "type",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "PostType",
+      "kind": "ENUM",
+      "ofType": null
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "LinkedInPostMetadataInput": {
+  "name": "LinkedInPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "annotations",
+    "type": {
+     "name": null,
+     "kind": "LIST",
+     "ofType": {
+      "name": null,
+      "kind": "NON_NULL",
+      "ofType": {
+       "name": "AnnotationInputLinkedIn",
+       "kind": "INPUT_OBJECT"
+      }
+     }
+    }
+   },
+   {
+    "name": "firstComment",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "linkAttachment",
+    "type": {
+     "name": "LinkAttachmentInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "MastodonPostMetadataInput": {
+  "name": "MastodonPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "spoilerText",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "thread",
+    "type": {
+     "name": null,
+     "kind": "LIST",
+     "ofType": {
+      "name": null,
+      "kind": "NON_NULL",
+      "ofType": {
+       "name": "ThreadedPostInput",
+       "kind": "INPUT_OBJECT"
+      }
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "PinterestPostMetadataInput": {
+  "name": "PinterestPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "boardServiceId",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "title",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "url",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "SubstackPostMetadataInput": {
+  "name": "SubstackPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "linkAttachment",
+    "type": {
+     "name": "LinkAttachmentInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "ThreadsPostMetadataInput": {
+  "name": "ThreadsPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "linkAttachment",
+    "type": {
+     "name": "LinkAttachmentInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "locationId",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "locationName",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "thread",
+    "type": {
+     "name": null,
+     "kind": "LIST",
+     "ofType": {
+      "name": null,
+      "kind": "NON_NULL",
+      "ofType": {
+       "name": "ThreadedPostInput",
+       "kind": "INPUT_OBJECT"
+      }
+     }
+    }
+   },
+   {
+    "name": "topic",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "type",
+    "type": {
+     "name": "PostType",
+     "kind": "ENUM",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "TikTokPostMetadataInput": {
+  "name": "TikTokPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "isAiGenerated",
+    "type": {
+     "name": "Boolean",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "title",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "TwitterPostMetadataInput": {
+  "name": "TwitterPostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "isAiGenerated",
+    "type": {
+     "name": "Boolean",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "retweet",
+    "type": {
+     "name": "RetweetMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "thread",
+    "type": {
+     "name": null,
+     "kind": "LIST",
+     "ofType": {
+      "name": null,
+      "kind": "NON_NULL",
+      "ofType": {
+       "name": "ThreadedPostInput",
+       "kind": "INPUT_OBJECT"
+      }
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "YoutubePostMetadataInput": {
+  "name": "YoutubePostMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "categoryId",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "embeddable",
+    "type": {
+     "name": "Boolean",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "isAiGenerated",
+    "type": {
+     "name": "Boolean",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "license",
+    "type": {
+     "name": "YoutubeLicense",
+     "kind": "ENUM",
+     "ofType": null
+    }
+   },
+   {
+    "name": "madeForKids",
+    "type": {
+     "name": "Boolean",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "notifySubscribers",
+    "type": {
+     "name": "Boolean",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "privacy",
+    "type": {
+     "name": "YoutubePrivacy",
+     "kind": "ENUM",
+     "ofType": null
+    }
+   },
+   {
+    "name": "title",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "LinkAttachmentInput": {
+  "name": "LinkAttachmentInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "description",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "thumbnail",
+    "type": {
+     "name": "LinkAttachmentThumbnailInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "title",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "url",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "ThreadedPostInput": {
+  "name": "ThreadedPostInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "assets",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": null,
+      "kind": "LIST",
+      "ofType": {
+       "name": null,
+       "kind": "NON_NULL"
+      }
+     }
+    }
+   },
+   {
+    "name": "metadata",
+    "type": {
+     "name": "ThreadItemMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "text",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "AnnotationInputFacebook": {
+  "name": "AnnotationInputFacebook",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "content",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "indices",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": null,
+      "kind": "LIST",
+      "ofType": {
+       "name": null,
+       "kind": "NON_NULL"
+      }
+     }
+    }
+   },
+   {
+    "name": "text",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "url",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "PostTypeFacebook": {
+  "name": "PostTypeFacebook",
+  "kind": "ENUM",
+  "inputFields": null,
+  "enumValues": [
+   {
+    "name": "post"
+   },
+   {
+    "name": "reel"
+   },
+   {
+    "name": "story"
+   }
+  ]
+ },
+ "GoogleBusinessEventMetaDataInput": {
+  "name": "GoogleBusinessEventMetaDataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "button",
+    "type": {
+     "name": "GoogleBusinessPostActionType",
+     "kind": "ENUM",
+     "ofType": null
+    }
+   },
+   {
+    "name": "endDate",
+    "type": {
+     "name": "DateTime",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "isFullDayEvent",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "Boolean",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "link",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "startDate",
+    "type": {
+     "name": "DateTime",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "title",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "GoogleBusinessOfferMetaDataInput": {
+  "name": "GoogleBusinessOfferMetaDataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "code",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "endDate",
+    "type": {
+     "name": "DateTime",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "link",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "startDate",
+    "type": {
+     "name": "DateTime",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "terms",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "title",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "GoogleBusinessWhatsNewMetaDataInput": {
+  "name": "GoogleBusinessWhatsNewMetaDataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "button",
+    "type": {
+     "name": "GoogleBusinessPostActionType",
+     "kind": "ENUM",
+     "ofType": null
+    }
+   },
+   {
+    "name": "link",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "PostTypeGoogleBusiness": {
+  "name": "PostTypeGoogleBusiness",
+  "kind": "ENUM",
+  "inputFields": null,
+  "enumValues": [
+   {
+    "name": "event"
+   },
+   {
+    "name": "offer"
+   },
+   {
+    "name": "whats_new"
+   }
+  ]
+ },
+ "InstagramGeolocationInput": {
+  "name": "InstagramGeolocationInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "id",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "text",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "InstagramStickerFieldsInput": {
+  "name": "InstagramStickerFieldsInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "music",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "other",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "products",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "text",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   },
+   {
+    "name": "topics",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "PostType": {
+  "name": "PostType",
+  "kind": "ENUM",
+  "inputFields": null,
+  "enumValues": [
+   {
+    "name": "carousel"
+   },
+   {
+    "name": "event"
+   },
+   {
+    "name": "ghost_post"
+   },
+   {
+    "name": "offer"
+   },
+   {
+    "name": "post"
+   },
+   {
+    "name": "reel"
+   },
+   {
+    "name": "short"
+   },
+   {
+    "name": "story"
+   },
+   {
+    "name": "thread"
+   },
+   {
+    "name": "whats_new"
+   }
+  ]
+ },
+ "AnnotationInputLinkedIn": {
+  "name": "AnnotationInputLinkedIn",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "id",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "entity",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "length",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "Int",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "link",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "localizedName",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "start",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "Int",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "vanityName",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "RetweetMetadataInput": {
+  "name": "RetweetMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "id",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   },
+   {
+    "name": "comment",
+    "type": {
+     "name": "String",
+     "kind": "SCALAR",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "YoutubeLicense": {
+  "name": "YoutubeLicense",
+  "kind": "ENUM",
+  "inputFields": null,
+  "enumValues": [
+   {
+    "name": "creativeCommon"
+   },
+   {
+    "name": "youtube"
+   }
+  ]
+ },
+ "YoutubePrivacy": {
+  "name": "YoutubePrivacy",
+  "kind": "ENUM",
+  "inputFields": null,
+  "enumValues": [
+   {
+    "name": "private"
+   },
+   {
+    "name": "public"
+   },
+   {
+    "name": "unlisted"
+   }
+  ]
+ },
+ "LinkAttachmentThumbnailInput": {
+  "name": "LinkAttachmentThumbnailInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "url",
+    "type": {
+     "name": null,
+     "kind": "NON_NULL",
+     "ofType": {
+      "name": "String",
+      "kind": "SCALAR",
+      "ofType": null
+     }
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "ThreadItemMetadataInput": {
+  "name": "ThreadItemMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "bluesky",
+    "type": {
+     "name": "ThreadItemBlueskyMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   },
+   {
+    "name": "threads",
+    "type": {
+     "name": "ThreadItemThreadsMetadataInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "GoogleBusinessPostActionType": {
+  "name": "GoogleBusinessPostActionType",
+  "kind": "ENUM",
+  "inputFields": null,
+  "enumValues": [
+   {
+    "name": "book"
+   },
+   {
+    "name": "call"
+   },
+   {
+    "name": "learn_more"
+   },
+   {
+    "name": "none"
+   },
+   {
+    "name": "order"
+   },
+   {
+    "name": "shop"
+   },
+   {
+    "name": "signup"
+   }
+  ]
+ },
+ "ThreadItemBlueskyMetadataInput": {
+  "name": "ThreadItemBlueskyMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "linkAttachment",
+    "type": {
+     "name": "LinkAttachmentInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ },
+ "ThreadItemThreadsMetadataInput": {
+  "name": "ThreadItemThreadsMetadataInput",
+  "kind": "INPUT_OBJECT",
+  "inputFields": [
+   {
+    "name": "linkAttachment",
+    "type": {
+     "name": "LinkAttachmentInput",
+     "kind": "INPUT_OBJECT",
+     "ofType": null
+    }
+   }
+  ],
+  "enumValues": null
+ }
+}
