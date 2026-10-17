@@ -1,0 +1,223 @@
+{
+ "f02-instagram": {
+  "ok": true,
+  "video": "L17_aula",
+  "dueAt": "2026-10-18T15:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L17_aula.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ec95769b457934964eb6",
+    "dueAt": "2026-10-18T15:00:00.000Z"
+   }
+  }
+ },
+ "f02-tiktok": {
+  "ok": true,
+  "video": "L17_aula",
+  "dueAt": "2026-10-18T15:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L17_aula.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ec96938409f1d0a3badc",
+    "dueAt": "2026-10-18T15:00:00.000Z"
+   }
+  }
+ },
+ "f04-instagram": {
+  "ok": true,
+  "video": "L17_dicas",
+  "dueAt": "2026-10-18T21:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L17_dicas.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ec98769b457934964f14",
+    "dueAt": "2026-10-18T21:00:00.000Z"
+   }
+  }
+ },
+ "f04-tiktok": {
+  "ok": true,
+  "video": "L17_dicas",
+  "dueAt": "2026-10-18T21:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L17_dicas.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ec99938409f1d0a3bc7d",
+    "dueAt": "2026-10-18T21:00:00.000Z"
+   }
+  }
+ },
+ "f04-youtube": {
+  "ok": true,
+  "video": "L17_dicas",
+  "dueAt": "2026-10-18T21:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L17_dicas.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ec9bae173d6e00d4d51c",
+    "dueAt": "2026-10-18T21:00:00.000Z"
+   }
+  }
+ },
+ "f05-instagram": {
+  "ok": true,
+  "video": "L18_aula",
+  "dueAt": "2026-10-19T15:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L18_aula.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ec9f0b0d72757af60bf7",
+    "dueAt": "2026-10-19T15:00:00.000Z"
+   }
+  }
+ },
+ "f05-tiktok": {
+  "ok": true,
+  "video": "L18_aula",
+  "dueAt": "2026-10-19T15:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L18_aula.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3eca0769b457934965174",
+    "dueAt": "2026-10-19T15:00:00.000Z"
+   }
+  }
+ },
+ "f05-youtube": {
+  "ok": true,
+  "video": "L18_aula",
+  "dueAt": "2026-10-19T15:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L18_aula.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3eca1938409f1d0a3bde3",
+    "dueAt": "2026-10-19T15:00:00.000Z"
+   }
+  }
+ },
+ "f06-instagram": {
+  "ok": true,
+  "video": "L17_exemplo",
+  "dueAt": "2026-10-19T21:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L17_exemplo.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3eca3769b4579349651ea",
+    "dueAt": "2026-10-19T21:00:00.000Z"
+   }
+  }
+ },
+ "f06-tiktok": {
+  "ok": true,
+  "video": "L17_exemplo",
+  "dueAt": "2026-10-19T21:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L17_exemplo.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3eca40b0d72757af60c5f",
+    "dueAt": "2026-10-19T21:00:00.000Z"
+   }
+  }
+ },
+ "f06-youtube": {
+  "ok": true,
+  "video": "L17_exemplo",
+  "dueAt": "2026-10-19T21:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L17_exemplo.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3eca5ae173d6e00d4d7bb",
+    "dueAt": "2026-10-19T21:00:00.000Z"
+   }
+  }
+ },
+ "f07-instagram": {
+  "ok": true,
+  "video": "L18_dicas",
+  "dueAt": "2026-10-20T15:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L18_dicas.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3eca8938409f1d0a3be39",
+    "dueAt": "2026-10-20T15:00:00.000Z"
+   }
+  }
+ },
+ "f07-tiktok": {
+  "ok": true,
+  "video": "L18_dicas",
+  "dueAt": "2026-10-20T15:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L18_dicas.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3eca9e272c4918fa1a35e",
+    "dueAt": "2026-10-20T15:00:00.000Z"
+   }
+  }
+ },
+ "f07-youtube": {
+  "ok": true,
+  "video": "L18_dicas",
+  "dueAt": "2026-10-20T15:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L18_dicas.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ecaaae173d6e00d4d7f6",
+    "dueAt": "2026-10-20T15:00:00.000Z"
+   }
+  }
+ },
+ "f08-instagram": {
+  "ok": true,
+  "video": "L19_aula",
+  "dueAt": "2026-10-20T21:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L19_aula.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ecb00b0d72757af60ecf",
+    "dueAt": "2026-10-20T21:00:00.000Z"
+   }
+  }
+ },
+ "f08-tiktok": {
+  "ok": true,
+  "video": "L19_aula",
+  "dueAt": "2026-10-20T21:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L19_aula.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ecb1769b45793496533f",
+    "dueAt": "2026-10-20T21:00:00.000Z"
+   }
+  }
+ },
+ "f08-youtube": {
+  "ok": true,
+  "video": "L19_aula",
+  "dueAt": "2026-10-20T21:00:00Z",
+  "url": "https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/L19_aula.mp4",
+  "resp": {
+   "__typename": "PostActionSuccess",
+   "post": {
+    "id": "6ad3ecb20b0d72757af60f11",
+    "dueAt": "2026-10-20T21:00:00.000Z"
+   }
+  }
+ }
+}
