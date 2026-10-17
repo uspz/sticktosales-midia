@@ -1,0 +1,39 @@
+name: Buffer schema
+on:
+  push:
+    paths: ["buffer/pedido-schema.txt"]
+permissions:
+  contents: write
+jobs:
+  s:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json,os,urllib.request
+          def q(query):
+              r=urllib.request.Request("https://api.buffer.com",data=json.dumps({"query":query}).encode(),headers={"Content-Type":"application/json","Authorization":"Bearer "+os.environ["KEY"]})
+              try: return json.load(urllib.request.urlopen(r,timeout=30))
+              except urllib.error.HTTPError as e: return {"http_error":e.code,"body":e.read().decode()[:500]}
+          T="query($n:String!){ __type(name:$n){ name kind inputFields{ name type{ name kind ofType{ name kind ofType{ name kind } } } } enumValues{ name } } }"
+          def t(n):
+              r=urllib.request.Request("https://api.buffer.com",data=json.dumps({"query":T,"variables":{"n":n}}).encode(),headers={"Content-Type":"application/json","Authorization":"Bearer "+os.environ["KEY"]})
+              try: return json.load(urllib.request.urlopen(r,timeout=30)).get("data",{}).get("__type")
+              except Exception as e: return str(e)
+          out={}; seen=set(); todo=["CreatePostInput"]
+          while todo and len(seen)<40:
+              n=todo.pop(0)
+              if n in seen: continue
+              seen.add(n); d=t(n); out[n]=d
+              if isinstance(d,dict):
+                  for f in d.get("inputFields") or []:
+                      ty=f["type"]
+                      while ty and not ty.get("name"): ty=ty.get("ofType")
+                      if ty and ty.get("kind") in ("INPUT_OBJECT","ENUM") and ty["name"] not in seen: todo.append(ty["name"])
+          os.makedirs("buffer",exist_ok=True); json.dump(out,open("buffer/schema.json","w"),indent=1)
+          PY
+          git config user.name escritorio-bot; git config user.email bot@users.noreply.github.com
+          git add buffer/schema.json && git commit -m "Buffer schema" && git push || true
