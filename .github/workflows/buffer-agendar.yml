@@ -1,0 +1,45 @@
+name: Buffer agendar
+on:
+  push:
+    paths: ["buffer/agenda.json"]
+permissions:
+  contents: write
+concurrency: buffer-agendar
+jobs:
+  agendar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json,os,urllib.request
+          CH={"tiktok":"6ad3e8f8778b240e2f3f7de0","youtube":"6ad3e8be778b240e2f3f7c15","instagram":"6ad3e8aa778b240e2f3f7b82"}
+          def gql(query,variables):
+              r=urllib.request.Request("https://api.buffer.com",data=json.dumps({"query":query,"variables":variables}).encode(),headers={"Content-Type":"application/json","Authorization":"Bearer "+os.environ["KEY"]})
+              try: return json.load(urllib.request.urlopen(r,timeout=60))
+              except urllib.error.HTTPError as e: return {"http_error":e.code,"body":e.read().decode()[:500]}
+          def ctype(u):
+              try:
+                  r=urllib.request.urlopen(urllib.request.Request(u,method="HEAD"),timeout=30); return r.headers.get("Content-Type","")
+              except Exception as e: return "erro:"+str(e)[:80]
+          M="""mutation($i:CreatePostInput!){ createPost(input:$i){ __typename ... on PostActionSuccess { post { id dueAt } } ... on MutationError { message } } }"""
+          ag=json.load(open("buffer/agenda.json")); path="buffer/agendados.json"
+          feitos=json.load(open(path)) if os.path.exists(path) else {}
+          for p in ag["posts"]:
+              jd=f"https://cdn.jsdelivr.net/gh/uspz/sticktosales-midia@main/lote2/{p['video']}.mp4"
+              url=jd if "video" in ctype(jd) else f"https://raw.githubusercontent.com/uspz/sticktosales-midia/main/lote2/{p['video']}.mp4"
+              for rede in p["redes"]:
+                  k=f"{p['fila']}-{rede}"
+                  if feitos.get(k,{}).get("ok"): continue
+                  meta={"instagram":{"instagram":{"type":"reel","shouldShareToFeed":True}},"tiktok":{"tiktok":{"title":p["titulo"][:90]}},
+                        "youtube":{"youtube":{"title":p["titulo"][:100],"privacy":"public","categoryId":"27","madeForKids":False,"notifySubscribers":True}}}[rede]
+                  i={"channelId":CH[rede],"text":p["legenda"],"schedulingType":"automatic","mode":"customScheduled","dueAt":p["dueAt"],"needsApproval":False,
+                     "assets":[{"video":{"url":url}}],"metadata":meta}
+                  r=gql(M,{"i":i}); cp=(r.get("data") or {}).get("createPost") or {}
+                  feitos[k]={"ok":cp.get("__typename")=="PostActionSuccess","video":p["video"],"dueAt":p["dueAt"],"url":url,"resp":cp or r}
+          json.dump(feitos,open(path,"w"),ensure_ascii=False,indent=1)
+          PY
+          git config user.name escritorio-bot; git config user.email bot@users.noreply.github.com
+          git add buffer/agendados.json && git commit -m "Buffer: resultado do agendamento" && git push || true
