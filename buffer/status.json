@@ -1,0 +1,37 @@
+{
+ "quando": "2026-10-17T21:39:03.020218Z",
+ "chave_presente": true,
+ "account": {
+  "data": {
+   "account": {
+    "organizations": [
+     {
+      "id": "6ad3e5796f988628671ddd79",
+      "name": "My organization"
+     }
+    ]
+   }
+  }
+ },
+ "channels": {
+  "data": {
+   "channels": [
+    {
+     "id": "6ad3e8f8778b240e2f3f7de0",
+     "name": "salestostick",
+     "service": "tiktok"
+    },
+    {
+     "id": "6ad3e8be778b240e2f3f7c15",
+     "name": "Stick To Sales",
+     "service": "youtube"
+    },
+    {
+     "id": "6ad3e8aa778b240e2f3f7b82",
+     "name": "sticktosales",
+     "service": "instagram"
+    }
+   ]
+  }
+ }
+}
