@@ -1,0 +1,230 @@
+From 802ba31bd66eeccc2fd7fdaa9b73c23e762ee4d5 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 21 Oct 2026 14:48:25 +0000
+Subject: [PATCH] =?UTF-8?q?Final=20em=20loop:=20--loop=20no=20cuts.py=20e?=
+ =?UTF-8?q?=20confer=C3=AAncia=20no=20lessongen.py?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+O último segundo do corte volta ao primeiro frame (mesma pose, enquadramento
+e gancho), e o cartão final sai 1 s antes para nenhum plano passar de 3 s no fim.
+python3 lessongen.py loop NN <corte> saida.png gera a folha de conferência.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_014abte9DrRFxqndzHodgHAc
+---
+ CLAUDE.md         |  1 +
+ prof/cuts.py      | 79 ++++++++++++++++++++++++++++++++++++++++-------
+ prof/lessongen.py | 30 ++++++++++++++++--
+ 3 files changed, 97 insertions(+), 13 deletions(-)
+
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 2488772..2edddaa 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -19,6 +19,7 @@ Vídeos verticais (1080x1920, 30 fps) de dicas de vendas com um professor de bon
+ - Cada lição é um `prof/specNN.py` curto: HOOK, CUT_HOOKS, CAP, HT, TITLES, MARKED (texto idêntico ao roteiro + marcas), ITEMS (tipos: t, bar, big, strike, check, bub, stamp, follow, x, ok, arrow, icon) e GROUPS opcional. O motor é `prof/lessongen.py`.
+ - Conferir: `python3 lessongen.py stills NN saida.png t1,t2,...` (usa `alinhamentos/alNN_pt.json`).
+ - Render: `python3 cuts.py render NN PT <aula|dicas|exemplo> saida.mp4` (a aula abre com o gancho na tela) e depois `add_music.sh` revezando as trilhas.
++- Final em loop: acrescente `--loop` ao render (ou ao still). O último segundo volta ao primeiro frame (pose, enquadramento e gancho) e o cartão final sai 1 s antes. Conferir com `python3 lessongen.py loop NN <aula|dicas|exemplo> saida.png` (mostra 1º frame, a volta e o último frame; "diff 1o x ultimo" tem que dar 0).
+ - Mídia: copiar para `uspz/sticktosales-midia/loteN/` (repo público) e agendar no Metricool com a URL raw, um post por vídeo com tiktok+instagram+youtube.
+ 
+ ## Conferência antes de publicar
+diff --git a/prof/cuts.py b/prof/cuts.py
+index 367d524..e16b468 100644
+--- a/prof/cuts.py
++++ b/prof/cuts.py
+@@ -2,6 +2,8 @@
+ uso:
+   python3 cuts.py still <lesson> <EN|PT> <cut_id> <saida.png> <t_rel1,t_rel2,...>
+   python3 cuts.py render <lesson> <EN|PT> <cut_id> <saida.mp4>
++  --loop (em still ou render): o último segundo volta ao primeiro frame (mesma pose, enquadramento e gancho),
++         e o cartão final sai 1 s antes para não ficar mais de 3 s parado no fim.
+ """
+ import sys, json, math, subprocess, importlib, os
+ from cairoc import Canvas
+@@ -103,10 +105,12 @@ def draw_hook(c, txt, tr):
+         c.pop_paint(k)
+ 
+ 
+-def draw_endcard(c, txt, tr, dur):
+-    t0 = dur - 2.6
++def draw_endcard(c, txt, tr, dur, gap=0.0):
++    """gap: segundos livres no fim (o trecho do loop); o cartão sai antes dele."""
++    t0 = dur - 2.6 - gap
+     if not txt or tr < t0: return
+-    k = sstep((tr - t0) / 0.3)
++    k = sstep((tr - t0) / 0.3) * (1 - sstep((tr - (dur - gap)) / 0.25) if gap > 0 else 1.0)
++    if k <= 0: return
+     pop = 1.0 + 0.12 * math.sin(math.pi * clamp((tr - t0) / 0.35, 0, 1))
+     c.save(); c.translate(W / 2, 1805); c.scale(pop, pop)
+     c.font('Poppins', 46, True); w = c.extents(txt).x_advance
+@@ -131,17 +135,67 @@ def setup(n, lang, cut):
+     return mod, al, pf, poses, a, b, blocks_mod
+ 
+ 
+-def frame(c, mod, pf, poses, f, blocks_mod, L, end, a, b, hook, endtxt):
++def frame(c, mod, pf, poses, f, blocks_mod, L, end, a, b, hook, endtxt, gap=0.0):
+     t = f / FPS
+     mod.render_frame(c, pf, poses, f, blocks_mod, L, end)
+     tr = t - a
+     c.color('#E0E0E0'); c.rect(0, 0, W, 12); c.fill()
+     c.color('#000000'); c.rect(0, 0, W * clamp(tr / (b - a), 0, 1), 12); c.fill()
+     draw_hook(c, hook, tr)
+-    draw_endcard(c, endtxt, tr, b - a)
++    draw_endcard(c, endtxt, tr, b - a, gap)
++
++
++def frame_px(c):
++    import numpy as np
++    return np.frombuffer(c.bgr0_bytes(), np.uint8).reshape(H, W, 4)
++
++
++class Looper:
++    """Guarda o 1º frame do corte e mistura o último segundo de volta nele."""
++    def __init__(self, c, mod, pf, poses, fa, fb, blocks_mod, L, end, a, b, hook, endtxt):
++        from lessongen import LOOP_DUR
++        self.fa, self.n, self.gap = fa, fb - fa, LOOP_DUR
++        frame(c, mod, pf, poses, fa, blocks_mod, L, end, a, b, hook, endtxt, self.gap)
++        self.first = frame_px(c).copy()
++
++    def px(self, c, f):
++        from lessongen import loop_k, loop_blend
++        return loop_blend(frame_px(c), self.first, loop_k(f - self.fa, self.n))
++
++
++def cut_frames(a, b):
++    return int(round(a * FPS)), int(round(b * FPS))
++
++
++def loop_sheet(n, lang, cut, out):
++    """Folha de conferência do loop: 1º frame, início da volta, meio da volta e último frame."""
++    import numpy as np
++    from PIL import Image
++    from lessongen import LOOP_DUR
++    mod, al, pf, poses, a, b, blocks_mod = setup(n, lang, cut)
++    hook = mod.HOOK if cut == 'aula' else mod.CUT_HOOKS[cut]
++    endtxt = '' if cut == 'aula' else ENDCARD[lang]
++    c = Canvas(W, H); fa, fb = cut_frames(a, b)
++    lp = Looper(c, mod, pf, poses, fa, fb, blocks_mod, mod.TXT[lang], al['end'], a, b, hook, endtxt)
++    lf = int(round(LOOP_DUR * FPS))
++    fs = [fa, fb - 1 - lf - int(2.6 * FPS), fb - 1 - lf, fb - 1 - lf // 2, fb - 1]
++    ims, last = [], None
++    for f in fs:
++        frame(c, mod, pf, poses, f, blocks_mod, mod.TXT[lang], al['end'], a, b, hook, endtxt, lp.gap)
++        px = lp.px(c, f); last = px
++        ims.append(Image.fromarray(px[:, :, 2::-1].copy()).resize((360, 640)))
++    sheet = Image.new('RGB', (len(ims) * 364, 644), 'gray')
++    for i, im in enumerate(ims): sheet.paste(im, (i * 364, 0))
++    sheet.save(out)
++    diff = int(np.abs(last[:, :, :3].astype(int) - lp.first[:, :, :3].astype(int)).max())
++    print('loop', n, cut, 'frames', fb - fa, 'dur', round((fb - fa) / FPS, 2), 'diff 1o x ultimo', diff,
++          'tempos', [round((f - fa) / FPS, 2) for f in fs])
++    return diff
+ 
+ 
+ def main():
++    loop = '--loop' in sys.argv
++    if loop: sys.argv.remove('--loop')
+     mode, n, lang, cut = sys.argv[1], int(sys.argv[2]), sys.argv[3], sys.argv[4]
+     mod, al, pf, poses, a, b, blocks_mod = setup(n, lang, cut)
+     L = mod.TXT[lang]
+@@ -149,14 +203,18 @@ def main():
+     else: hook = HOOKS[n][cut][lang]
+     endtxt = '' if cut == 'aula' else ENDCARD[lang]
+     c = Canvas(W, H)
++    fa, fb = cut_frames(a, b)
++    lp = Looper(c, mod, pf, poses, fa, fb, blocks_mod, L, al['end'], a, b, hook, endtxt) if loop else None
++    gap = lp.gap if lp else 0.0
+     if mode == 'still':
+         from PIL import Image
+         out = sys.argv[5]; times = [float(x) for x in sys.argv[6].split(',')]
+         ims = []
+         for tr in times:
+-            f = int((a + tr) * FPS)
+-            frame(c, mod, pf, poses, f, blocks_mod, L, al['end'], a, b, hook, endtxt)
+-            ims.append(Image.fromarray(c.rgb()).resize((360, 640)))
++            f = min(fb - 1, int((a + tr) * FPS))
++            frame(c, mod, pf, poses, f, blocks_mod, L, al['end'], a, b, hook, endtxt, gap)
++            rgb = lp.px(c, f)[:, :, 2::-1].copy() if lp else c.rgb()
++            ims.append(Image.fromarray(rgb).resize((360, 640)))
+         cols = min(5, len(ims)); rows = (len(ims) + cols - 1) // cols
+         sheet = Image.new('RGB', (cols * 364, rows * 644), 'gray')
+         for i, im in enumerate(ims): sheet.paste(im, ((i % cols) * 364, (i // cols) * 644))
+@@ -164,7 +222,6 @@ def main():
+         print('cut', n, lang, cut, round(a, 2), round(b, 2), 'dur', round(b - a, 2))
+     else:
+         outp = sys.argv[5]
+-        fa, fb = int(round(a * FPS)), int(round(b * FPS))
+         dur = (fb - fa) / FPS
+         ff = subprocess.Popen(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'bgr0', '-s', f'{W}x{H}',
+                                '-r', str(FPS), '-i', '-', '-ss', f'{fa / FPS:.3f}', '-t', f'{dur:.3f}', '-i', al['audio'],
+@@ -173,8 +230,8 @@ def main():
+                                '-af', f'afade=t=in:d=0.04,afade=t=out:st={max(0, dur - 0.3):.3f}:d=0.3,apad,loudnorm=I=-14:TP=-1.5:LRA=11',
+                                '-c:a', 'aac', '-b:a', '192k', '-t', f'{dur:.3f}', outp], stdin=subprocess.PIPE)
+         for f in range(fa, fb):
+-            frame(c, mod, pf, poses, f, blocks_mod, L, al['end'], a, b, hook, endtxt)
+-            ff.stdin.write(c.bgr0_bytes())
++            frame(c, mod, pf, poses, f, blocks_mod, L, al['end'], a, b, hook, endtxt, gap)
++            ff.stdin.write(lp.px(c, f).tobytes() if lp else c.bgr0_bytes())
+         ff.stdin.close(); ff.wait()
+         print('ok', outp, round(dur, 2))
+ 
+diff --git a/prof/lessongen.py b/prof/lessongen.py
+index dc34c05..936c4cf 100644
+--- a/prof/lessongen.py
++++ b/prof/lessongen.py
+@@ -1,6 +1,8 @@
+ """Motor genérico de lições: cada lição é um arquivo specNN.py curto (MARKED, TITLES, ITEMS, HOOK...).
+ uso: python3 lessongen.py stills <NN> saida.png t1,t2,... (usa alinhamentos/alNN_pt.json)
+-O render (aula e cortes) é feito pelo cuts.py: python3 cuts.py render NN PT <aula|dicas|exemplo> saida.mp4
++O render (aula e cortes) é feito pelo cuts.py: python3 cuts.py render NN PT <aula|dicas|exemplo> saida.mp4 [--loop]
++Conferir o final em loop: python3 lessongen.py loop <NN> <aula|dicas|exemplo> saida.png
++  (folha com o 1º frame, o início da volta e o último frame, e a diferença entre o 1º e o último)
+ """
+ import sys, json, math, re, importlib, os
+ from cairoc import Canvas
+@@ -268,6 +270,26 @@ class Lesson:
+         B.draw_captions(c, pf, t)
+ 
+ 
++# ------------------------------------------------------------------ final em loop
++LOOP_DUR = 1.0   # segundos finais em que o vídeo volta ao primeiro frame (pose, câmera e gancho)
++
++
++def loop_k(i, n, fps=FPS, loop_dur=LOOP_DUR):
++    """Peso do primeiro frame no frame i de um corte com n frames: 0 até o último segundo,
++    sobe suave e chega a 1 exatamente no último frame (i = n - 1)."""
++    lf = max(1, int(round(loop_dur * fps)))
++    return sstep((i - (n - 1 - lf)) / lf)
++
++
++def loop_blend(cur, first, k):
++    """Mistura o frame atual (HxWx4 uint8) com o primeiro frame do corte. k=1 devolve o primeiro frame."""
++    import numpy as np
++    if k <= 0: return cur
++    if k >= 1: return first
++    out = cur.astype(np.float32) * (1 - k) + first.astype(np.float32) * k
++    return (out + 0.5).astype(np.uint8)
++
++
+ def it_dur(it):
+     return DUR[it[0]]
+ 
+@@ -283,7 +305,11 @@ def module_for(n):
+ 
+ 
+ if __name__ == '__main__':
+-    if sys.argv[1] == 'stills':
++    if sys.argv[1] == 'loop':
++        import cuts
++        n, cut, out = int(sys.argv[2]), sys.argv[3], sys.argv[4]
++        cuts.loop_sheet(n, 'PT', cut, out)
++    elif sys.argv[1] == 'stills':
+         n = int(sys.argv[2]); out = sys.argv[3]; times = [float(x) for x in sys.argv[4].split(',')]
+         root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+         al = json.load(open(f'{root}/alinhamentos/al{n}_pt.json'))
+-- 
+2.43.0
+
