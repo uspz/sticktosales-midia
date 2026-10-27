@@ -1,29 +1,42 @@
 #!/usr/bin/env bash
-# Ponte de voz do Escritório: instala no Linux Mint (grátis e local).
-# Uso: bash instalar-ponte-voz.sh          (Whisper, recomendado)
-#      bash instalar-ponte-voz.sh --vosk   (também baixa o Vosk, o mais leve)
+# Ponte de voz do Escritório: instala no Linux (antiX, Mint, Debian, Ubuntu). Grátis e local.
+# Uso: bash instalar-ponte-voz.sh            (escolhe o motor pela memória do PC)
+#      bash instalar-ponte-voz.sh --vosk     (força o Vosk, o mais leve)
+#      bash instalar-ponte-voz.sh --whisper  (força o Whisper, mais preciso)
 set -euo pipefail
 DIR="$HOME/.local/share/escritorio-voz"
 BIN="$HOME/.local/bin"
 echo "== Ponte de voz do Escritório =="
-if [ "${XDG_SESSION_TYPE:-x11}" = "wayland" ]; then
-  echo "Aviso: sessão Wayland detectada. O xdotool só digita na sessão X11 (Cinnamon padrão do Mint)."
-fi
-echo "1/4 Pacotes do sistema (pede a sua senha)"
-sudo apt-get update -qq
-sudo apt-get install -y python3-venv python3-pip xdotool xclip libportaudio2 libnotify-bin unzip wget
+ARCH="$(uname -m)"
+MEM=$(awk '/MemTotal/{print int($2/1024)}' /proc/meminfo)
+echo "PC: $ARCH, ${MEM} MB de RAM"
+MOTOR="whisper"; MODELO="base"
+if [ "$MEM" -lt 2500 ]; then MOTOR="vosk"; elif [ "$MEM" -lt 4000 ]; then MODELO="tiny"; fi
+case "$ARCH" in x86_64|aarch64) ;; *) MOTOR="vosk";; esac
+[ "${1:-}" = "--vosk" ] && MOTOR="vosk"
+[ "${1:-}" = "--whisper" ] && MOTOR="whisper"
+echo "Motor escolhido: $MOTOR $( [ "$MOTOR" = whisper ] && echo "($MODELO)")"
+PKGS="python3-venv python3-pip xdotool xclip libportaudio2 libnotify-bin unzip wget"
+echo "1/4 Pacotes do sistema"
+if [ "$(id -u)" = "0" ]; then apt-get update -qq && apt-get install -y $PKGS
+elif command -v sudo >/dev/null 2>&1 && sudo -v 2>/dev/null; then sudo apt-get update -qq && sudo apt-get install -y $PKGS
+else echo "Digite a senha de root (antiX):"; su -c "apt-get update -qq && apt-get install -y $PKGS"; fi
 echo "2/4 Ambiente Python em $DIR"
 mkdir -p "$DIR" "$BIN"
 python3 -m venv "$DIR/venv"
 "$DIR/venv/bin/pip" install -q --upgrade pip
-"$DIR/venv/bin/pip" install -q faster-whisper sounddevice numpy
-if [ "${1:-}" = "--vosk" ]; then
-  echo "   + Vosk e o modelo pt-BR pequeno (31 MB)"
+"$DIR/venv/bin/pip" install -q sounddevice numpy
+if [ "$MOTOR" = "whisper" ]; then
+  "$DIR/venv/bin/pip" install -q faster-whisper
+  PADRAO="--modelo $MODELO"
+else
   "$DIR/venv/bin/pip" install -q vosk
   if [ ! -d "$DIR/vosk-model-small-pt-0.3" ]; then
+    echo "   baixando o modelo pt-BR do Vosk (31 MB)"
     wget -q -O "$DIR/vosk.zip" https://alphacephei.com/vosk/models/vosk-model-small-pt-0.3.zip
     unzip -q -o "$DIR/vosk.zip" -d "$DIR" && rm -f "$DIR/vosk.zip"
   fi
+  PADRAO="--motor vosk"
 fi
 echo "3/4 Script da ponte"
 cat > "$DIR/ponte_voz.py" <<'PONTE_PY_FIM'
@@ -101,7 +114,7 @@ def avisar(msg):
 def digitar(texto, janela):
     """Ativa a janela do painel, cola o texto no chat e aperta Enter."""
     if os.environ.get("XDG_SESSION_TYPE", "").lower() == "wayland":
-        avisar("Sessão Wayland: o xdotool não consegue digitar. Entre na sessão X11 (Cinnamon padrão do Mint).")
+        avisar("Sessão Wayland: o xdotool não consegue digitar. Use uma sessão X11 (o antiX e o Mint já usam X11).")
         return False
     r = subprocess.run(["xdotool", "search", "--onlyvisible", "--name", janela], capture_output=True, text=True)
     ids = [x for x in r.stdout.split() if x.strip()]
@@ -238,7 +251,7 @@ if __name__ == "__main__":
 PONTE_PY_FIM
 cat > "$BIN/ponte-voz" <<EOF2
 #!/usr/bin/env bash
-exec "$DIR/venv/bin/python" "$DIR/ponte_voz.py" "\$@"
+exec "$DIR/venv/bin/python" "$DIR/ponte_voz.py" $PADRAO "\$@"
 EOF2
 chmod +x "$BIN/ponte-voz"
 echo "4/4 Atalho no menu"
@@ -254,7 +267,6 @@ Terminal=true
 Categories=Utility;
 EOF3
 echo
-echo "Pronto. Abra o Escritório no navegador, clique no chat e rode:  ponte-voz"
-echo "Na primeira vez ele baixa o modelo de voz (~145 MB). Depois funciona sem internet."
-echo "Se aparecer \"comando não encontrado\", use  ~/.local/bin/ponte-voz  (ou saia e entre de novo na sessão)."
-echo "Opções: ponte-voz --modelo small (mais preciso) · --motor vosk (mais leve) · --sempre (sem dizer Aria)"
+echo "Pronto. Abra o Escritório no navegador, clique no chat e rode:  ~/.local/bin/ponte-voz"
+[ "$MOTOR" = whisper ] && echo "Na primeira vez ele baixa o modelo de voz. Depois funciona sem internet."
+echo "Opções: --modelo small (mais preciso) · --motor vosk (mais leve, reinstale com --vosk) · --sempre (sem dizer Aria)"

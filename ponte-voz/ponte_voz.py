@@ -72,7 +72,7 @@ def avisar(msg):
 def digitar(texto, janela):
     """Ativa a janela do painel, cola o texto no chat e aperta Enter."""
     if os.environ.get("XDG_SESSION_TYPE", "").lower() == "wayland":
-        avisar("Sessão Wayland: o xdotool não consegue digitar. Entre na sessão X11 (Cinnamon padrão do Mint).")
+        avisar("Sessão Wayland: o xdotool não consegue digitar. Use uma sessão X11 (o antiX e o Mint já usam X11).")
         return False
     r = subprocess.run(["xdotool", "search", "--onlyvisible", "--name", janela], capture_output=True, text=True)
     ids = [x for x in r.stdout.split() if x.strip()]
