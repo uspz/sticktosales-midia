@@ -39,6 +39,20 @@ INTERJ = re.compile(r"^(ei|oi|o|ola|e ai|hey|alo|bom dia|boa tarde|boa noite)\s+
 ALUCINA = re.compile(r"(legendas? (pela|por)|amara\.org|inscreva-se|obrigad[oa] por assistir|^obrigad[oa]\.?$|^tchau\.?$)", re.I)
 
 
+ATIVA = re.compile(r"^\W*(?:(?:ei|oi|ola|hey|alo)\W+)?(m?[aá]r[iy][aá]?|[aá]i[aá]|[aá]ria?s?|[aá]rea|alia|aira|a\s+ria|ha?ri[ay]a)\b[\s,.!?:;-]*", re.I)
+PROMPT = "Aria, status do time. Aria, pausa. Aria, continua. Aria, quanto gastei? Recrutador, roteirista, designer, programador. Escritório Stick To Sales."
+
+
+def corrigir(texto):
+    """Troca as variações que o Whisper erra ("Aia", "Maria", "Área"...) por "Aria," no começo da frase."""
+    t = str(texto or "").strip()
+    m = ATIVA.match(t)
+    if not m:
+        return t
+    resto = t[m.end():].strip()
+    return "Aria, " + resto if resto else "Aria"
+
+
 def norm(s):
     s = unicodedata.normalize("NFD", str(s or "").lower())
     s = "".join(c for c in s if unicodedata.category(c) != "Mn")
@@ -98,7 +112,7 @@ def motor_whisper(modelo):
 
     def transcrever(audio):
         segs, _ = m.transcribe(audio, language="pt", beam_size=1, vad_filter=True,
-                               condition_on_previous_text=False)
+                               condition_on_previous_text=False, initial_prompt=PROMPT)
         return " ".join(s.text.strip() for s in segs).strip()
     return transcrever
 
@@ -189,7 +203,7 @@ def main():
             audio = corte.passo(fila.get())
             if audio is None:
                 continue
-            txt = transcrever(audio)
+            txt = corrigir(transcrever(audio))
             if not txt:
                 continue
             aberto = time.time() < aberto_ate
